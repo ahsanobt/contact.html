@@ -1,0 +1,28 @@
+<script>
+    // Replace the URL below with your actual Google Apps Script URL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzULLJm8jXEtLXhJUUHsClo4p3bZWripfjC8E6xbM36XueipPFt6SWOpiYAXwP3Jm6m/exec'
+    const form = document.getElementById('contact-form')
+    const msg = document.getElementById('msg')
+
+    form.addEventListener('submit', e => {
+        e.preventDefault()
+        const submitBtn = document.getElementById('submit-btn')
+        submitBtn.innerText = "SENDING..."
+        submitBtn.disabled = true // Prevent double submissions
+
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => {
+                msg.style.display = "block"
+                form.reset()
+                submitBtn.innerText = "SEND MESSAGE"
+                submitBtn.disabled = false
+                // Hide success message after 5 seconds
+                setTimeout(() => { msg.style.display = "none" }, 5000)
+            })
+            .catch(error => {
+                console.error('Error!', error.message)
+                alert("Something went wrong. Please try again.")
+                submitBtn.disabled = false
+            })
+    })
+</script>
